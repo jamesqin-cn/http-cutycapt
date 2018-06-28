@@ -43,8 +43,9 @@ func echoFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func thumbFunc(w http.ResponseWriter, r *http.Request) {
-	imageId := uuid.NewV4().String()
-	imageFile := fmt.Sprintf("/tmp/%s.png", imageId)
+	u, _ := uuid.NewV4()
+	imageID := u.String()
+	imageFile := fmt.Sprintf("/tmp/%s.png", imageID)
 
 	url := GetQuery(r, "url", "http://www.baidu.com")
 	if false == strings.HasPrefix(url, "http://") && false == strings.HasPrefix(url, "https://") {

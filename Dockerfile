@@ -1,6 +1,7 @@
 FROM golang AS builder
-RUN go get -v github.com/jamesqin-cn/docker-cutycapt \
-  && cd /go/src/github.com/jamesqin-cn/docker-cutycapt \
+ADD . /go/src/github.com/jamesqin-cn/docker-cutycapt/
+RUN cd /go/src/github.com/jamesqin-cn/docker-cutycapt \
+  && go get -v \
   && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
 

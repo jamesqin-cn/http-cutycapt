@@ -1,7 +1,7 @@
 FROM golang AS builder
 RUN go get -v github.com/jamesqin-cn/docker-cutycapt \
   && cd /go/src/github.com/jamesqin-cn/docker-cutycapt \
-  && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o pipec .
+  && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
 
 FROM centos

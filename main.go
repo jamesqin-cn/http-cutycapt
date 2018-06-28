@@ -53,7 +53,8 @@ func thumbFunc(w http.ResponseWriter, r *http.Request) {
 	}
 	width := GetQuery(r, "width", "1024")
 	height := GetQuery(r, "height", "768")
-	cmdStr := fmt.Sprintf("xvfb-run --server-args=\"-screen 0, 1920x1080x24\" CutyCapt --url=\"%s\" --min-width=%s --min-height=%s --out=%s", url, width, height, imageFile)
+	delay := GetQuery(r, "delay", "1000")
+	cmdStr := fmt.Sprintf("xvfb-run --server-args=\"-screen 0, 1920x1080x24\" CutyCapt --url=\"%s\" --min-width=%s --min-height=%s --delay=%s --out=%s", url, width, height, delay, imageFile)
 
 	glog.Infoln("execute command : ", cmdStr)
 	cmd := exec.Command("sh", "-c", cmdStr)

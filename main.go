@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -54,7 +55,8 @@ func thumbFunc(w http.ResponseWriter, r *http.Request) {
 	width := GetQuery(r, "width", "1024")
 	height := GetQuery(r, "height", "768")
 	delay := GetQuery(r, "delay", "1000")
-	cmdStr := fmt.Sprintf("xvfb-run --server-args=\"-screen 0, 1920x1080x24\" CutyCapt --url=\"%s\" --min-width=%s --min-height=%s --delay=%s --out=%s", url, width, height, delay, imageFile)
+	format := GetQuery(r, "format", "images")
+	cmdStr := fmt.Sprintf("xvfb-run --server-args=\"-screen 0, 1920x1080x24\" CutyCapt --url=\"%s\" --min-width=%s --min-height=%s --delay=%s --plugins=on --javascript=on --js-can-access-clipboard=on --out=%s", url, width, height, delay, imageFile)
 
 	glog.Infoln("execute command : ", cmdStr)
 	cmd := exec.Command("sh", "-c", cmdStr)
@@ -68,8 +70,15 @@ func thumbFunc(w http.ResponseWriter, r *http.Request) {
 	}
 
 	contents, err := ioutil.ReadFile(imageFile)
-	w.Header().Set("content-type", "image/png")
-	w.Write(contents)
+	if format == "html" {
+		base64String := base64.StdEncoding.EncodeToString(contents)
+		output := fmt.Sprintf("<html><body><image src=\"data:image/png;base64,%s\" /></body></html>", base64String)
+		w.Header().Set("content-type", "text/html")
+		w.Write([]byte(output))
+	} else {
+		w.Header().Set("content-type", "image/png")
+		w.Write(contents)
+	}
 
 	os.Remove(imageFile)
 }

@@ -72,7 +72,7 @@ func thumbFunc(w http.ResponseWriter, r *http.Request) {
 	contents, err := ioutil.ReadFile(imageFile)
 	if format == "html" {
 		base64String := base64.StdEncoding.EncodeToString(contents)
-		output := fmt.Sprintf("<html><body><image src=\"data:image/png;base64,%s\" /></body></html>", base64String)
+		output := fmt.Sprintf("<html><body><img src=\"data:image/png;base64,%s\" /></body></html>", base64String)
 		w.Header().Set("content-type", "text/html")
 		w.Write([]byte(output))
 	} else {
